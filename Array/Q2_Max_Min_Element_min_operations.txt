@@ -1,0 +1,142 @@
+Problem: Find Maximum and Minimum of an Array
+Goal: Find both the largest and smallest numbers in an array using the fewest number of comparisons.
+
+✅ Solution 1: Brute Force (Simple Linear Scan)
+Logic:
+Iterate through the array and keep updating the current minimum and maximum.
+
+java
+Copy
+Edit
+
+public static int[] findMinMaxBruteForce(int[] arr) {
+    int min = arr[0];
+    int max = arr[0];
+
+    for (int i = 1; i < arr.length; i++) {
+        if (arr[i] < min) min = arr[i];
+        if (arr[i] > max) max = arr[i];
+    }
+
+    return new int[]{min, max};
+}
+Time Complexity: O(n)
+
+Space Complexity: O(1)
+
+Comparisons: 2(n - 1)
+
+
+
+
+
+✅ Solution 2: Optimized Pairwise Comparison
+Logic:
+
+Compare elements in pairs instead of one-by-one.
+
+Each pair gives 3 comparisons instead of 4 if done separately.
+
+java
+Copy
+Edit
+public static int[] findMinMaxEfficient(int[] arr) {
+    int min, max, i;
+
+    if (arr.length % 2 == 0) {
+        if (arr[0] > arr[1]) {
+            max = arr[0];
+            min = arr[1];
+        } else {
+            max = arr[1];
+            min = arr[0];
+        }
+        i = 2;
+    } else {
+        min = max = arr[0];
+        i = 1;
+    }
+
+    while (i < arr.length - 1) {
+        int localMin, localMax;
+
+        if (arr[i] > arr[i + 1]) {
+            localMax = arr[i];
+            localMin = arr[i + 1];
+        } else {
+            localMax = arr[i + 1];
+            localMin = arr[i];
+        }
+
+        if (localMin < min) min = localMin;
+        if (localMax > max) max = localMax;
+        i += 2;
+    }
+
+    return new int[]{min, max};
+}
+Time Complexity: O(n)
+
+Space Complexity: O(1)
+
+Comparisons: ~1.5n - 2
+
+
+
+
+
+✅ Solution 3: Divide and Conquer (Tournament Method)
+Logic:
+
+Recursively split the array into halves.
+
+Find min and max in each half, then combine.
+
+java
+Copy
+Edit
+class Pair {
+    int min;
+    int max;
+    Pair(int min, int max) {
+        this.min = min;
+        this.max = max;
+    }
+}
+
+public static Pair findMinMaxDivideAndConquer(int[] arr, int low, int high) {
+    if (low == high) {
+        return new Pair(arr[low], arr[low]);
+    }
+
+    if (high == low + 1) {
+        if (arr[low] > arr[high])
+            return new Pair(arr[high], arr[low]);
+        else
+            return new Pair(arr[low], arr[high]);
+    }
+
+    int mid = (low + high) / 2;
+    Pair left = findMinMaxDivideAndConquer(arr, low, mid);
+    Pair right = findMinMaxDivideAndConquer(arr, mid + 1, high);
+
+    int overallMin = Math.min(left.min, right.min);
+    int overallMax = Math.max(left.max, right.max);
+
+    return new Pair(overallMin, overallMax);
+}
+Time Complexity: O(n)
+
+Space Complexity: O(log n) (due to recursion stack)
+
+Comparisons: ~1.5n - 2
+
+🔄 Comparison Summary:
+
+
+
+Method	Time	Space	Comparisons	Remarks
+Brute Force	O(n)	O(1)	2(n - 1)	Very easy to implement
+Pairwise Efficient	O(n)	O(1)	~1.5n - 2	Most efficient method overall
+Divide & Conquer	O(n)	O(log n)	~1.5n - 2	Best for recursion understanding
+Let me know if you want similar documentation for the Array Reversal problem or any other common interview topic!

@@ -1,0 +1,134 @@
+Input: An array arr[] of size n, and an integer k
+Goal: Find:
+
+Kth smallest element
+
+Kth largest element
+
+✅ Solution 1: Brute Force – Sort and Pick
+Logic:
+Sort the array, then pick the k-1 index (for min) or n-k index (for max).
+
+java
+Copy
+Edit
+import java.util.Arrays;
+
+public static int kthSmallestBruteForce(int[] arr, int k) {
+    Arrays.sort(arr);  // O(n log n)
+    return arr[k - 1]; // Kth smallest
+}
+
+public static int kthLargestBruteForce(int[] arr, int k) {
+    Arrays.sort(arr);  // O(n log n)
+    return arr[arr.length - k]; // Kth largest
+}
+Time: O(n log n)
+
+Space: O(1)
+
+Simple and reliable but not the best for large inputs.
+
+✅ Solution 2: Min-Heap (for Kth Largest) or Max-Heap (for Kth Smallest)
+Logic:
+
+For Kth largest → Use Min Heap of size k
+
+For Kth smallest → Use Max Heap of size k
+
+Kth Largest using Min Heap:
+java
+Copy
+Edit
+import java.util.PriorityQueue;
+
+public static int kthLargestHeap(int[] arr, int k) {
+    PriorityQueue<Integer> minHeap = new PriorityQueue<>();
+    for (int num : arr) {
+        minHeap.offer(num);
+        if (minHeap.size() > k) {
+            minHeap.poll();  // remove smallest
+        }
+    }
+    return minHeap.peek();  // top is kth largest
+}
+Kth Smallest using Max Heap:
+java
+Copy
+Edit
+import java.util.Collections;
+import java.util.PriorityQueue;
+
+public static int kthSmallestHeap(int[] arr, int k) {
+    PriorityQueue<Integer> maxHeap = new PriorityQueue<>(Collections.reverseOrder());
+    for (int num : arr) {
+        maxHeap.offer(num);
+        if (maxHeap.size() > k) {
+            maxHeap.poll();  // remove largest
+        }
+    }
+    return maxHeap.peek();  // top is kth smallest
+}
+Time: O(n log k)
+
+Space: O(k)
+
+Great for large arrays when k is small.
+
+✅ Solution 3: Quickselect Algorithm (Optimal)
+Logic:
+Quickselect is a variation of QuickSort. It works in average O(n) time.
+
+java
+Copy
+Edit
+import java.util.Random;
+
+public static int quickSelect(int[] arr, int left, int right, int k) {
+    if (left == right) return arr[left];
+
+    int pivotIndex = partition(arr, left, right);
+    int count = pivotIndex - left + 1;
+
+    if (count == k)
+        return arr[pivotIndex];
+    else if (k < count)
+        return quickSelect(arr, left, pivotIndex - 1, k);
+    else
+        return quickSelect(arr, pivotIndex + 1, right, k - count);
+}
+
+private static int partition(int[] arr, int low, int high) {
+    int pivot = arr[high];
+    int i = low;
+
+    for (int j = low; j < high; j++) {
+        if (arr[j] <= pivot) {
+            int temp = arr[i];
+            arr[i] = arr[j];
+            arr[j] = temp;
+            i++;
+        }
+    }
+
+    int temp = arr[i];
+    arr[i] = arr[high];
+    arr[high] = temp;
+    return i;
+}
+quickSelect(arr, 0, arr.length - 1, k) → gives Kth smallest
+
+quickSelect(arr, 0, arr.length - 1, arr.length - k + 1) → Kth largest
+
+Time: O(n) average case, O(n²) worst case
+
+Space: O(1)
+
+Most efficient when you only need the Kth value, not full sort.
+
+🔄 Summary Table
+
+Method	Time	Space	Best For
+Sort & Pick	O(n log n)	O(1)	Simple, small inputs
+Heap	O(n log k)	O(k)	Efficient for large n, small k
+Quickselect	O(n) avg	O(1)	Most optimal if only Kth value needed

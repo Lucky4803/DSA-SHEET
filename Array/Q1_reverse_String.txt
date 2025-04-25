@@ -1,0 +1,56 @@
+Q 1 . array reverse algorithms
+✅ 1. Brute Force (Using Extra Array)
+java
+CopyEdit
+public static int[] reverseBruteForce(int[] arr) {
+    int n = arr.length;
+    int[] reversed = new int[n];
+    for (int i = 0; i < n; i++) {
+        reversed[i] = arr[n - 1 - i];
+    }
+    return reversed;
+}
+
+Time: O(n)
+
+
+Space: O(n) — uses extra array
+
+
+
+✅ 2. In-Place Reversal using Two Pointers (Efficient)
+java
+CopyEdit
+public static void reverseInPlace(int[] arr) {
+    int start = 0, end = arr.length - 1;
+    while (start < end) {
+        int temp = arr[start];
+        arr[start] = arr[end];
+        arr[end] = temp;
+        start++;
+        end--;
+    }
+}
+
+Time: O(n)
+
+
+Space: O(1) — no extra space used
+
+
+
+✅ 3. Recursive Approach
+java
+CopyEdit
+public static void reverseRecursive(int[] arr, int start, int end) {
+    if (start >= end) return;
+    int temp = arr[start];
+    arr[start] = arr[end];
+    arr[end] = temp;
+    reverseRecursive(arr, start + 1, end - 1);
+}
+
+Time: O(n)
+
+
+Space: O(n) due to recursive stack

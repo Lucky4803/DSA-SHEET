@@ -1,0 +1,144 @@
+🚀 Move All Negative Numbers to the Beginning and Positive to the End
+
+
+
+✅ Brute Force Solution (Using Extra Space)
+Approach:
+🗂️ Create two separate arrays:
+
+One for negative numbers.
+
+One for positive numbers.
+
+🔁 Traverse the original array and divide elements into these arrays.
+
+🔄 Combine the arrays, with negative numbers at the front and positive numbers at the end.
+
+Code Implementation (Java):
+java
+Copy
+Edit
+public class Main {
+    public static void main(String[] args) {
+        int[] arr = {-12, 11, -13, 5, -6, -7, 5, 11};
+        moveNegativesToFront(arr);
+        
+        // Print the array after reordering
+        for (int num : arr) {
+            System.out.print(num + " ");
+        }
+    }
+
+    public static void moveNegativesToFront(int[] arr) {
+        int[] negative = new int[arr.length];
+        int[] positive = new int[arr.length];
+        int negCount = 0, posCount = 0;
+
+        // Populate negative and positive arrays
+        for (int num : arr) {
+            if (num < 0) {
+                negative[negCount++] = num;
+            } else {
+                positive[posCount++] = num;
+            }
+        }
+
+        // Copy the negative numbers to the front
+        for (int i = 0; i < negCount; i++) {
+            arr[i] = negative[i];
+        }
+        
+        // Copy the positive numbers to the end
+        for (int i = 0; i < posCount; i++) {
+            arr[negCount + i] = positive[i];
+        }
+    }
+}
+Complexity:
+⏱️ Time Complexity: O(n)
+
+🧑‍💻 Space Complexity: O(n) (due to extra arrays)
+
+
+
+✅ Efficient Solution (Two Pointer Approach)
+Approach:
+🧭 Two pointers technique:
+
+low starts at the beginning of the array.
+
+high starts at the end of the array.
+
+🏃‍♂️ Move the pointers:
+
+Increment low when a negative number is found.
+
+Decrement high when a positive number is found.
+
+🔄 Swap if arr[low] is positive and arr[high] is negative.
+
+Repeat until the low pointer crosses the high pointer.
+
+Code Implementation (Java):
+java
+Copy
+Edit
+public class Main {
+    public static void main(String[] args) {
+        int[] arr = {-12, 11, -13, 5, -6, -7, 5, 11};
+        moveNegativesToFront(arr);
+        
+        // Print the array after reordering
+        for (int num : arr) {
+            System.out.print(num + " ");
+        }
+    }
+
+    public static void moveNegativesToFront(int[] arr) {
+        int low = 0, high = arr.length - 1;
+
+        // Traverse the array with two pointers
+        while (low < high) {
+            if (arr[low] < 0) {
+                low++;  // Move the low pointer if it is already negative
+            } else if (arr[high] >= 0) {
+                high--;  // Move the high pointer if it is positive
+            } else {
+                // Swap the elements when the left is positive and right is negative
+                swap(arr, low, high);
+                low++;
+                high--;
+            }
+        }
+    }
+
+    // Helper method to swap elements at indices i and j
+    private static void swap(int[] arr, int i, int j) {
+        int temp = arr[i];
+        arr[i] = arr[j];
+        arr[j] = temp;
+    }
+}
+Complexity:
+⏱️ Time Complexity: O(n)
+
+🧑‍💻 Space Complexity: O(1) (no extra space used)
+
+🔍 Comparison of Approaches:
+
+Method	⏱️ Time Complexity	🧑‍💻 Space Complexity	📋 Key Notes
+Brute Force	O(n)	O(n)	✅ Uses additional arrays for negative and positive numbers.
+Efficient (Two Pointers)	O(n)	O(1)	✅ In-place solution using two pointers with minimal extra space.
+✨ Key Takeaways:
+Brute Force:
+
+✅ Simple to implement.
+
+❌ Uses extra space for two arrays.
+
+Efficient (Two Pointers):
+
+✅ Space-efficient, works in-place.
+
+❌ Slightly more complex but optimal in terms of space.
+
